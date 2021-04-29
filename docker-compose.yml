@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  strapi:
+    image: strapi/strapi
+    ports:
+      - "1337:1337"
+    volumes:
+      - ./docker-example-strapi/api:/srv/app/api
+      - ./docker-example-strapi/config:/srv/app/config
+      - ./docker-example-strapi/extensions:/srv/app/extensions
