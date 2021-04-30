@@ -1,10 +1,37 @@
 version: "3.9"
 services:
   strapi:
-    image: strapi/strapi
+    build: ./docker-example-strapi
     ports:
       - "1337:1337"
+    depends_on:
+      - "db"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: strapi
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: admin
+      DATABASE_PORT: 5432
     volumes:
-      - ./docker-example-strapi/api:/srv/app/api
-      - ./docker-example-strapi/config:/srv/app/config
-      - ./docker-example-strapi/extensions:/srv/app/extensions
+      - ./docker-example-strapi:/app
+      - /app/node_modules
+  frontend:
+    build: ./docker-example-ecom
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./docker-example-ecom:/app
+      - /app/node_modules
+  db:
+    image: postgres
+    ports:
+      - "8001:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: strapi
+    volumes:
+      - example-pgdata:/var/lib/postgresql/data
+volumes:
+  example-pgdata:
+    external: true
