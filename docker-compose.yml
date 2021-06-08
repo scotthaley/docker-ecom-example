@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  migrations:
+    build: ./docker-example-migrations
+    depends_on:
+      - "db"
+      - "strapi"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: strapi
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: admin
+      DATABASE_PORT: 5432
   strapi:
     build: ./docker-example-strapi
     ports:
@@ -19,6 +30,10 @@ services:
     build: ./docker-example-ecom
     ports:
       - "3000:3000"
+    depends_on:
+      - "strapi"
+    environment:
+      NEXT_PUBLIC_STRAPI_API_URL: http://strapi:1337
     volumes:
       - ./docker-example-ecom:/app
       - /app/node_modules
@@ -32,6 +47,18 @@ services:
       POSTGRES_DB: strapi
     volumes:
       - example-pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "8002:80"
+    restart: unless-stopped
 volumes:
   example-pgdata:
     external: true
+  pgadmin:

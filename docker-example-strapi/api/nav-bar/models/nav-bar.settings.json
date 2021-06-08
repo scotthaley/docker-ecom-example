@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "nav_bars",
+  "info": {
+    "name": "NavBar"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "categories": {
+      "collection": "category"
+    }
+  }
+}

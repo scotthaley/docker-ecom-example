@@ -1,0 +1,15 @@
+{
+  "name": "docker-example-migrations",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Scott Haley",
+  "license": "MIT",
+  "scripts": {
+    "seed": "knex seed:run"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "knex": "^0.95.4",
+    "pg": "^8.6.0"
+  }
+}

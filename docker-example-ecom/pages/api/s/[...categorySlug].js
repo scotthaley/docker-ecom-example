@@ -1,4 +1,5 @@
 import { subcategory } from 'react-storefront-connector'
+import {fetchCategory, fetchNavBarTabs} from "../../../lib/api";
 
 export default async function plp(req, res) {
   // Note: the structure of the query string is controlled by the queryForState prop passed
@@ -12,17 +13,32 @@ export default async function plp(req, res) {
     }
   }
 
+  const [categoryPage, category, tabs] = await Promise.all([
+    subcategory({
+      q,
+      slug,
+      page,
+      filters: JSON.stringify(filters),
+      sort,
+    },
+    req,
+    res),
+    fetchCategory(slug[0]),
+    fetchNavBarTabs()
+  ])
+
   res.json(
-    await subcategory(
-      {
-        q,
-        slug,
-        page,
-        filters: JSON.stringify(filters),
-        sort,
+    {
+      ...categoryPage,
+      pageData: {
+        ...categoryPage.pageData,
+        name: category.displayName,
+        title: category.displayName
       },
-      req,
-      res
-    )
+      appData: {
+        ...categoryPage.appData,
+        tabs
+      }
+    }
   )
 }
